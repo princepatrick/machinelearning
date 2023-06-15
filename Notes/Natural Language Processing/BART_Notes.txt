@@ -1,0 +1,41 @@
+BART Algorithm:
+1. BART:
+	BERT cant do Machine Translation and Text Summarization.
+	But BART can be used for text classification, token classification, translation, text summarization and question answering
+	It uses a concept called denoising autoencoder.
+
+	Masked Language Modelling:
+	It is a technique for pre-training text data which was introduced with BERT, where we mask some of the words in the pre-training data and let the model predict the word in an unsupervised manner, purely by understanding the context of the remaining part of the sentence.
+	One additional advantage this provides is that this blanks makes sure the model is not overfit into the data we are training with.
+
+	Similarly we can use noise to cover the data in the BERT model which helps in the model to be not overfit to the data we are training with.
+
+	Why BERT and GPT might not be suited for text summarization tasks:
+		BERT is a Bidirectional encoder, that runs on the masked data and GPT is a Autoregressive Decoder architecture, that runs on finding the next word given the previous words in the sentence. 
+		BERT being a model that predicts the masked words, is suited for tasks that involve filling the blanks, text classification and token classification as it understands the context in a better way.
+		GPT although being suited for text generation, it cannot understand the context of the sentence in a good way as it runs only from left to right.
+
+	BART on the other hand combines both the model, in that it uses both a Bidirectional Encoder and a Autoregressive Decoder
+
+	BART model:
+	The Pre-Training process in BART model is the game-changer in solving the issue. The pre-training process involves:
+	The text contains 5 words in this order - A B C D E
+	1. Token Masking - 
+		A _ D _ E - The model needs to predict the missing words of B and D
+		A _ _ _ E - The model needs to predict the missing words of B, C and D
+	2. Token Deletion -
+		A D E - The pre-training process deletes some words (B, C in this case) and then the model predicts the missed words without no mask indicating the deleted words
+	3. Sentence Permutation - 
+		DE ABC - The pre-training process moves the part of the sentence and the model needs to predict and rearrange it to the correct order of ABCDE.
+	4. Document Rotation -
+		C AB DE - The pre-trainig process finds how the text would be if the text starts from C instead of the word A as in the original text.
+	5. Text Infilling -
+		A___E - The words B, C and D are missing but only one blank space is displayed for the model to predict.
+
+	BART has better performance than BERT using these pretraining tasks. The most efficient ones of these are Token Masking, Token Deletion and Token Infilling whereas sentence permutation and document rotation are less efficient ones.
+
+	BART is used for various NLP tasks. Explaining the significance and the workings of each of them is as below:
+		Text Classification:
+			The Encoder -> Decoder -> Text The last token of the text that is provided as the output is used for classifying the text and it is used for sentiment analysis and other applications that is uses text classification.
+		Token Classification:
+			The Encoder -> Decoder -> Representation  The last hidden state of the decoder is used for the representation of each token and identifying and recognizing the nature and state of the token.
