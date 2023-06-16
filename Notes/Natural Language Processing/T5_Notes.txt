@@ -1,0 +1,26 @@
+T5:
+BERT had been major player in the research work involving NLP. 
+Many upcoming researchers worked on this and had customised this model in various ways like the architecture used, computation power, fine tuning the parameters, datasets used etc.
+Google AI had been aware of these developments and used the research work that was involved in these models to build an AI model with 11 Billion parameters named T5 that worked on a Text-To-Text approach.
+The team had explored the various corruption strategies, corruption rate and corrupted span length and chose the optimal parameters that was suited in developing the model
+The team had attempted each of these variations to build a model with 11 billion parameters to create a unified Text-To-Text model.
+
+
+Motive: It is create combine all the downstream tasks into a text-to-text format
+
+Factors of variation explored:
+Attention Masking and Foundational architecture
+self-supervised objective
+architecture
+datasets
+fine-tuning strategy
+extra computation
+
+We consider the various ways to handle attention mechanism and architecture models:
+Attention Mechanism:
+Fully Visible, Causal, Prefix visibility with Causal
+
+Architecture:
+Encoder-Decoder, Language Model and Prefix LM
+
+The architecture decides that the BERT-style architecture with a replace spans as the pre-training model, corruption rate as 15% and with a corrupted span length of 2 or 3 and using the C4 dataset.
