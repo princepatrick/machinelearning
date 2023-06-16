@@ -1,0 +1,27 @@
+PEGASUS - Abstractive Summarization
+
+In other models that we found until now, the models are trained to a generic pre-trained tasks and then are specifically fine tuned to the downstream tasks.
+In the PEGASUS model, we are going to do the pre-train in a task that is closer to the downstream tasks.
+
+PEGASUS Pre-training task:
+Gap Sentences Generation - This is similar to Masked Language Modelling but multiple tokens are removed and the model needs to understand the context of the Gap and then fill it with the answer.
+Datasets: C4 and HugeNews
+
+Downstream datasets:
+XSum
+CNN/DailyMail
+PubMed etc
+
+The considerations/customization of the GSG pre-training objective:
+Gap Sentences Ratio
+Strategies for selecting the Gap Sentences
+Additional use of MLM
+Using C4 or HugeNews
+Tokenizer Vocab BPE vs unigram
+
+PEGASUS performs much better than existing benchmarks in zero shot and low resource summarization tasks
+Zero Shot Summarization:
+When you are working on a data that it was not trained for.
+
+Low Resource Summarization:
+When you are working on a dataset that contains low resource for training
