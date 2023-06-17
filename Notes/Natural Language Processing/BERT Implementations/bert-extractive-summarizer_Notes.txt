@@ -1,1 +1,55 @@
+what is bert-extractive-summarizer?
+	It is a model that uses the pre-trained model from google by default, without any fine-tuning process done.
+	It is a tool that uses HuggingFace Pytorch transformers library to run extractive summarization 
+	Process:
+		Embedd the sentence
+		Run a clustering algorithm
+		find the sentences that are closest to the centroid
+		
+	Note: It also uses the HuggingFace NeuralCoref library to resolve the words in the summary that needs context.
 
+Process:
+	Tokenized the Incoming paragraph into clean sentence
+	The tokenized words are sent to BERT model to produce output embeddings
+	The embeddings are clustered by KMeans
+	Select the embeddings that are closest to the centroid
+
+
+Tokenization:
+	For transcripts retrieved from Udacity, a custom parser was created to convert the .srt file into a paragraph
+	NLTK library is used to extract the sentences, breaking up the content to be fed into the models for inference
+	Removing or editing sentences that do not add to the context
+	Removed the content relevant to Udacity quizzes.
+	Remove small and large sentences
+	
+BERT for text embedding:
+	The second to last averaged layer produced the best embeddings for representations of words
+	One hypothesis for this is the final layer is biased by the classification tasks
+	The BERT implementations uses the BERT model from the huggingface transformers library
+	The BERT model in the huggingface transformer library is a python wrapper of the BERT model from Google and in addition to that also contains the GPT2 model.
+	The ensembling of BERT and GPT2 models produced the best results for embeddings but lacked in the memory and speed efficiency.
+
+Clustering Embeddings:
+	Once the N-2 layer embeddings was completed, the N*E matrix was ready for clustering.
+	The input for the number of clusters and sentences was provided by the user of the API
+	Both KMeans and Gaussian models wre considered fro clustering but finally KMeans was selected, although the performance was similar.
+
+Results:
+	Since there was no golden truth summaries for the data, the human interaction is the only metric that was used.
+	
+	Model Weakness:
+		1. Handle Large text to be summarized into few sentences which led to losing context. One solution was to use multiple sentences that were closest to the centroid, but that would mean to go against the ratio parameter set by the user. Hence, would impact the user experience.
+		2. Another weakness was the model included sentences that contain wordss like 'this', 'that' etc which lacked context on what it was referring to. A naive brute force approach would be to remove the sentences that contained such a word but this would impact the quality of the model. Another approach was to replace such words with the actual words they referred to but it was hard to do as sometimes the words were present in 2-3 sentences prior which made it hard to locate the reference exactly.
+
+Further Improvements:
+	The model has used the pre-trained Google BERT model by default, instead we could additionally fine tune the model by the Udacity Data so that the summarization could be better.
+	Fill in the gaps for the missing context in the sentence
+	The model itself predicts the right number of sentences needed to convey the summary of the paragraph. This could be done using the sum of squares method
+	
+
+trained, supervised, dataset, What metric and how the metric is evaluating the model?
+
+Training: Only the pre-trained BERT model was directly used as default and no additional fine-tuning is done
+Dataset: We dont have a training dataset but we only use the Udacity dataset for testing
+Metric: No metric available so we had to use human evaluation
+	
