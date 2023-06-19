@@ -18,7 +18,7 @@ Process:
 Tokenization:
 	For transcripts retrieved from Udacity, a custom parser was created to convert the .srt file into a paragraph
 	NLTK library is used to extract the sentences, breaking up the content to be fed into the models for inference
-	Removing or editing sentences that do not add to the context
+	Removing or editing sentences that needs additional context
 	Removed the content relevant to Udacity quizzes.
 	Remove small and large sentences
 	
@@ -52,4 +52,82 @@ trained, supervised, dataset, What metric and how the metric is evaluating the m
 Training: Only the pre-trained BERT model was directly used as default and no additional fine-tuning is done
 Dataset: We dont have a training dataset but we only use the Udacity dataset for testing
 Metric: No metric available so we had to use human evaluation
+
+What is the use of using distilbert-base-uncased
+By default bert-large-uncased (BERT Large) is used as the model, which is the large version of bert (340M parameters) but for the implementation we are using distilbert-base-uncased (Distil BERT) is using 44M parameters while preserving 90% of the performance of it.
+
+
+Sentence-BERT: https://arxiv.org/pdf/1908.10084.pdf
+	The BERT and ROBERTA model has become the state-of-the-art in various text related tasks.
+	Though for sentence-pair regression tasks, BERT is heavily intensive and could need a lot of time. For eg: A BERT model planning to find the most similar sentence-pair in a list of 10000 sentences would require 50 million computations and 65 hours of computing time.
+	This is the reason the model Sentence-BERT is introduced which uses Siamese and triplet networks to find the similarity between two sentences and this reduces the time needed to 5 seconds.
+	
+	Introduction
+		Since the semantic search is a time consuming process, another Commonly Used method is to feed each sentence to the BERT model and then map the response in a vector space and the sentence that is closest to each other is used as the output but this process is in poor quality and leads to bad performance.
+	
+		In the SBERT , a siamese network on the dataset produces fixed-size vectors and by using a similarity measure like cosine similarity or Manhattan/Euclidean  distance, we can find the semantically similar sentences.
+		The SBERT model is fine-tuned on NLI data.
+		It out-performs other state-of-the-art sentence embedding methods like InferSent and Universal Sentence Encoder.
+		
+		It sets the state of the art for a challenging argument similarity dataset and a triple dataset to differentiate sentences from differnet sections of wikipedia.
+	
+	Related Work:
+		BERT - state of the art results in various tasks on textual data
+		RoBERTa - improvement on BERT with change in the pre-training process
+		XLNet - worse than BERT
+		A large disadvantage of the BERT model is that individual sentence embeddings are not formed as a result researcher use one of the 2 methods:
+			Send sentence by sentence in the BERT model and then take the mean of the embeddings 
+			Send the sentences to the BERT model and then use the embeddings that come out in the CLS token place.
+		But the evaluation is not available to understand if they provided any improvement
+	
+	The Summarizer model could use Sentence-BERT instead of BERT for modelling the summarizer using a customized summarizer class called SBertSummarizer.
+	The SBertSummarizer by default accepts all-mpnet-base-v2 but we can provide customized models like paraphrase-MiniLM-L6-v2
+
+	Difference between all-mpnet-base-v2 and paraphrase-MiniLM-L6-v2:
+		Architecture:
+			all-mpnet-base-v2
+				It is  based on an architecture called MPNet ie. Multi Lingual Parallel Corpus Network.
+				The pre-training is done in multiple language to provide a cross-linguistic representations
+			paraphrase-MiniLM-L6-v2:
+				It is a lightweight version of the LM (Language Model)
+				It is trained for paraphrase and semantic similarity tasks
+				L6 refers to the number of layers in the architecture
+		
+		Trainig Data:
+			all-mpnet-base-v2:
+				It is multi-lingual in nature
+			paraphrase-MiniLM-L6-v2:
+				Layers: 6
+				The dataset is specifically curated for paraphrasing and semantic similarity
+				The dataset contains various pairs of sentences with the results as the similarity scores
+				Training Data: AllNLI, sentence-compression, SimpleWiki, altlex, msmarco-triplets, quora_duplicates, coco_captions,flickr30k_captions, yahoo_answers_title_question, S2ORC_citation_pairs, stackexchange_duplicate_questions, wiki-atomic-edits
+				Max Sequence Length: 128
+				Dimensions: 384
+				Normalized Embeddings: false
+				Suitable Score Functions: cosine-similarity (util.cos_sim)
+				Size: 80MB
+				Pooling: Mean Pooling
+
+				
+			paraphrase-MiniLM-L3-v2:
+				Layers: 3
+				Training Data:	AllNLI, sentence-compression, SimpleWiki, altlex, msmarco-triplets, quora_duplicates, coco_captions,flickr30k_captions, yahoo_answers_title_question, S2ORC_citation_pairs, stackexchange_duplicate_questions, wiki-atomic-edits
+		
+	
+	paraphrase-MiniLM-L6-v2:
+		It is a lightweight version of the LM (Language Model)
+		It is trained for paraphrase and semantic similarity tasks
+		L6 refers to the number of layers in the architecture
+		Layers: 6
+		The dataset is specifically curated for paraphrasing and semantic similarity
+		The dataset contains various pairs of sentences with the results as the similarity scores
+		Training Data: AllNLI, sentence-compression, SimpleWiki, altlex, msmarco-triplets, quora_duplicates, coco_captions,flickr30k_captions, yahoo_answers_title_question, S2ORC_citation_pairs, stackexchange_duplicate_questions, wiki-atomic-edits
+		Max Sequence Length: 128
+		Dimensions: 384
+		Normalized Embeddings: false
+		Suitable Score Functions: cosine-similarity (util.cos_sim)
+		Size: 80MB
+		Pooling: Mean Pooling
+
+
 	
