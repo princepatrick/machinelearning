@@ -128,6 +128,41 @@ Sentence-BERT: https://arxiv.org/pdf/1908.10084.pdf
 		Suitable Score Functions: cosine-similarity (util.cos_sim)
 		Size: 80MB
 		Pooling: Mean Pooling
+	
+		Evaluating for paraphrase:
+			classsentence_transformers.evaluation.ParaphraseMiningEvaluator(sentences_map: Dict[str, str], duplicates_list: Optional[List[Tuple[str, str]]] = None, duplicates_dict: Optional[Dict[str, Dict[str, bool]]] = None, add_transitive_closure: bool = False, query_chunk_size: int = 5000, corpus_chunk_size: int = 100000, max_pairs: int = 500000, top_k: int = 100, show_progress_bar: bool = False, batch_size: int = 16, name: str = '', write_csv: bool = True)
+			Given a large set of sentences, this evaluator performs paraphrase (duplicate) mining and identifies the pairs with the highest similarity. It compare the extracted paraphrase pairs with a set of gold labels and computes the F1 score.
+
+SciBert:
+SciBert addresses the lack of models to handle scientific tasks and the model is trained on 1.1 million scientific papers.
+Every other architectural values are same with the BERT model
+
+Architecture:
+	The architecture is BERT
+
+Vocabulary:
+	The vocabulary of base bert is BaseVocab
+	The vocabulary of science bert is SciVocab
+	The Vocabulary size of SciVocab is 30k and it matches with the BaseVocab
+	The token matching between BaseVocab and SciVocab is 42%
+
+Corpus:
+	Random sample of 1.14m papers in Semantic Scholar
+	18% from CS domain, 82% from Biomedical domain
+	154 sentences per paper and 2617 tokens per paper
+	3.1B tokens in total and in comparison 3.3B in BERT
+
+Training Method:
+	Masked Language Modeling and Next Sentence Prediction
+	Self-supervised learning
+
+Evaluation Metrics:
+	Not provided
+	
+
+
+
+
 
 
 	
