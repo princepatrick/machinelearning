@@ -1,0 +1,28 @@
+ROUGE:
+	ROUGE is a metric to calculate the words that exist in both generated summary and in one of the many reference summaries.
+	It calculates based on the n-gram that is present in common in both the generated and reference summaries.
+	There are various measures available for ROUGE. They are:
+	
+	ROUGE-N:
+		It measures the n-grams between the generated and reference summaries.
+		1-gram is unigram, 2-gram is bigram and so on.
+		It calculates the accuracy, precision and recall based on the n-gram match
+	
+	ROUGE-L:
+		It measures the longest common subsequence that exist between the generated and reference summaries.
+		The metric calculates the accuracy, precision and recall based on the match
+	
+	ROUGE-S:
+		It measures a concept called s-gram (skip-gram) which calculates the pair of words that does not appear adjacent to each other.
+		The metric calculates the accuracy, precision and recall based on the match.
+
+BLEU:
+	BLEU is another metric used for abstractive summarization where it uses two main sub-metrics to calculate the BLEU score.
+	The sub-metrics are precision (a varied version) and brevity penalty.
+	
+	Precision:
+		The precision score is calculated by finding the number of times an n-gram appears on the generated summary and the reference summary.
+		The scores are then combined to provide the final precision score.
+		
+	Brevity Penalty:
+		The BLEU penalizes if the generated summary is longer than the reference summaries to make sure the summary is not verbose in nature.
