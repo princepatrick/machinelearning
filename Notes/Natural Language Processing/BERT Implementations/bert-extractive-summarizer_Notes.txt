@@ -30,11 +30,15 @@ BERT for text embedding:
 	The ensembling of BERT and GPT2 models produced the best results for embeddings but lacked in the memory and speed efficiency.
 
 Clustering Embeddings:
+	TODO: When using KMeans - what is the K value used and how to find it
+	Elbow method: Read Below - We find the number of sentences and send it as the maximum number of clusters that could be considered. The Elbow runs the elbow algorithm with each cluster number and then choose the point where the inertia does not reduce.
+	
 	Once the N-2 layer embeddings was completed, the N*E matrix was ready for clustering.
 	The input for the number of clusters and sentences was provided by the user of the API
 	Both KMeans and Gaussian models wre considered fro clustering but finally KMeans was selected, although the performance was similar.
 
 Results:
+	TODO: Metrics for Extractive Summarization
 	Since there was no golden truth summaries for the data, the human interaction is the only metric that was used.
 	
 	Model Weakness:
@@ -160,9 +164,46 @@ Evaluation Metrics:
 	Not provided
 	
 
+Elbow Method:
+	When working with the KMeans algorithm, we need to find the optimal number of clusters required to define the model
+	Elbow method is one of the ways to find the optimal cluster limit.
+	When the clusters are low in number, the data points are in general more close to each other and when the number of clusters increases, the data points get more sparse.
+	The Elbow method revolves around calculating the sum of the squares of the distance between the data points. This is called the inertia.
+	we will find after a particular number of cluster (the optimal point) we find even if we increase the number of clusters, the distance between the points do not increase at all.
+	On plotting this sum of the squared distances(inertia) with the number of clusters, we will find the graph line will decreases until we reach the optimal point and then it remains constant throughout. This shape looks like an Elbow.
 
-
-
-
-
+Evaluation Method:
+	Not provided for bert-extractive-summarizer as there was no reference summaries
+	Still ROUGE is the most used one for extractive summarization
 	
+	Abstractive Summary: The boy was reading his book in silence.
+	Reference Summary: The boy is enjoying in silence.
+	
+	ROUGE-2:
+		Bigrams in Abstractive Generated Summary: "The boy", "boy was", "was reading", "reading his", "his book", "book in", "in silence"
+		Bigrams in Reference Summary: "The boy" , "boy is" , "is enjoying", "enjoying in" , "in silence"
+		
+		Common Bigrams: "The boy", "in silence" -> 2
+		
+		Number of bigrams in generated summary: 7
+		Number of bigrams in reference summary: 5
+		
+		ROUGE-2 precision: 2/7 = 0.28571428
+		ROUGE-2 Recall: 2/5 = 0.4
+		
+		F1-score: 2 * (precision*recall) /  (precision+recall) = 0.232 / 0.69 = 0.33
+
+Steps to follow for 1 page (about 60 sentences)
+	1. Run a extractive summary from 1 page to 
+		20 sentences
+		10 sentences
+		5 sentences
+		3 sentences
+		2 sentences
+		1 sentence
+	using 
+		BERT
+		distil-bert
+		SBERT
+All done
+		
