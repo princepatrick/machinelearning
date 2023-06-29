@@ -1,0 +1,32 @@
+Article in Medium: https://towardsdatascience.com/synthetic-data-generation-using-conditional-gan-45f91542ec6b
+
+Premise:
+Data is important to perform analysis but in real world getting large amount of data is a tedious process.
+Hence, we use GAN (in specific conditional GAN) to generate data 
+
+GAN(Generative Adversarial Network):
+GAN was proposed by Ian Goodfellow. It basically contains two components:
+	Generator: The purpose of the generator is to generate data that is as close as possible(similar) to the input data that is passed.
+	Discriminator: The purpose of the discriminator is to differntiate between the real data and generated data. The prediction is between 0 and 1, where a value close to 1 indicate, the value is a real data and the value close to 0 indicate the value is generated data.
+Now at the end of each iteration, a feedback is sent whether the data was differentiated successfully and this is used for the future iterations by the Generator and discriminator.
+The Generator and discriminator uses this feedback to improve their process to produce better results.
+
+Discriminator Loss:
+	This is calculated based on the discriminated values for each input. 
+	This loss is then backpropagated to the discriminator to change the discriminator weights so that the discriminator performance is increased.
+
+Generator Loss:
+	This is calculated using the discriminator's results and this is then backpropagated to both the discriminator and the generator.
+	These values are used to only update the Generator weights, so that the weights of the generator is updated so that the performance is increased.
+
+Drawback:
+	Although GAN was able to generate the data to a good level, it was not able to generate data that is close to the target label and the generated data also lacked diversity.
+	
+Conditional-GAN:
+	The Conditional-GAN was proposed in late 2014 by Mirza.
+	The difference in Conditional-GAN is that the Labels 'Y' of the data is being fed to both the discriminator and generator.
+	This label data helps in framing the weights of the generator and discriminator in a better way so that the system could produce more convincing data.
+
+The task in this article:
+	The data used in the Fashion MNIST data which contains the data for the grayscale images for 10 different products like socks, shoes etc.
+	

@@ -1,0 +1,101 @@
+Non-Image Data Generation using GAN or Variational Autoencoder:
+
+Spectral Enabled GAN for time series data generation:
+	Link: https://arxiv.org/abs/2103.01904
+	Complete Paper: https://arxiv.org/pdf/2103.01904.pdf
+	This is built as an improvement on the Time Series Generative Adversarial Network (TSGAN). This paper is to improve on the TSGAN by unifying the training of independent networks in TSGAN and creating a dependency on both training and learning.
+	This is called Unified TSGAN and has outperformed TSGAN in 80% of datasets using same epoch of training and 60% of datasets with 3/4 of the epochs.
+
+Introduction:
+	GANs are predominantly used for image oriented generation and tasks (2d Data) and very few amount of them have been used for time series generation tasks (1D data) (1%).
+	The primary reason for this is that GAN is very good in understanding and handling spectral properties and data (2D in nature)
+	One of the reasons this gap exists is since vast data is not available for time series data collection.
+	The few papers that has implementations with GAN is built with the training data with their own private dataset.
+
+	Few Shot Learning:
+		Few Shot Learning refers to the learning of the model by using limited training data.
+		THis could be critical for Time Series as the data is generally limited for this domain.
+
+Related Works:
+	The past works of GAN on Time Series data, involved a GAN network with the generator and discriminator being built out of a RNN architecture.
+	The various works involved the generator and discriminator being built out of RNN, LSTM, Convolutional Neural Network
+	These works lead to the understanding that **conditional input** is the central part in generating time series data
+	In this paper, we learn our conditioning insted of force feeding the network.
+
+The approach to uTSGAN:
+	Brief overview of TSGAN architecture:
+		The TSGAN architecture involves two WGANs - WGANx and WGANy. The WGANs throughout this paper is the Wasserstein GAN that is used witht Gradient Penalty. 
+		Each of the two WGANs have sepearate tasks:
+		WGANx: 
+			Task: It is primarily used to train the WGAN to generate 2d Synthetic Spectrometer images.
+			The WGANx involves 2 main components:
+				2D Generator:
+					The 2d generator takes in the real 2D spectrometer images, random noises to produce sythetic 2D spectrometer images.
+				2D Discriminator:
+					The 2d discriminator takes in the synthetic 2D spectrometer image and the real 2D spectrometer image to differentiate the original and fake images.
+					This finally produces the losses for the discriminator and generator which is used for backpropagation and training the models.
+				
+		WGANy:
+			Task: It is used to convert the 2d Spectrometer images into 1D time series signals.
+			The WGANy involves 2 main components:
+				2D to 1D Generator:
+					This takes in the 2D spectrometer synthetic images and creates 1D synthetic time series signals.
+				1D Discriminator:
+					The 1D discriminator once again takes up the 1D sythetic time serie siganal and real 1D time series signals to discriminate real and fake data
+					They produce the losses that are backpropagated to generate better 1D time series data.
+		
+		
+		Core Approach:
+			The primary motive is to use the deep spectral understanding abilities of the GAN architectures to produce the time series data.
+		
+		TSGAN takes up a 2D RGB  spectral image that got generate by a spectrometer and figures out what time series signal generates that 2D image.
+		
+		There are two faults with TSGAN though:
+			1. The training time is more since two WGANs are trained one after the other.
+			2. There is no dependency for the TSGAN to wait for the two WGAN one after the other. The WGANx is random in nature and would not in particularly better condition the WGANy in a better way.
+		
+	
+	uTSGAN: Unified TSGAN architecture
+		
+		Core Approach:
+			In TSGAN, the WGANx and WGANy provides two separate loss functions.
+			The uTSGAN proposes by combining both the separate loss functions into one common loss function and compare the results between the models.
+			The unified loss function is the average of the two loss functions - 1/2[Lx + Ly]
+		
+Data:
+	Uses the University of california riverside dataset that uses 70 Univariate 1D time series data.
+	These data collections sources are: Sensors, Spectrograms, Image Translations, Devices etc.
+	The datasets contain both binary class classification and multi class classification problems.
+	The data is mainly divided into 3 categories based on the size of the signals - 
+		0-499 signals as small, 500-1000 signals as medium and 1000+ as large signals.
+	Since the amount of data for image-tasks for GAN is small. Hence, we can consider the training to be a few-shot training model.
+
+Training Process:
+	The training process is similar to TSGAN.
+	The time-series data is converted to a spectrometer image data through using Short-Time Fourier Transforms.
+	These spectrometer images are used as the real spectrometer data images same as in the TSGAN.
+	Then we use the RGB values of these images as a matrix of [0-255] in pixel intensities in each channel. This representation still possess the spectral components of the image and hence enhance the time series data generation quality of the uTSGAN.
+	The loss function is optimized by Adam, the spectrometer images are generated by Librosa and the RGB images is stored in JPG format.
+
+Evaluation Metrics:
+	The team used a 1D Frechet Inception Score (FID) as the metric to check the quality of the generated time series data.
+	The FID score is used to calculate the distance between the features from a trained deep network's features from the real and synthetic data.
+	These features are then fit into Gaussian Distribution and Frechet Distance(or 2-Wasserstein Distance) and the similarity is calculated.
+	Note: Since the features and properties for various time-series data to differ from each other, unlike those in image based data. Hence, there is no common baseline dataset or standards for the model to follow.
+	The model uses a FCN for the time series classification network to pull features citing it's  ability to generalize.
+
+Testing Stats:
+	The data used has 70 univariate time series data with 28 as small, 26 as medium and 16 as large datasets.
+	The model and the weights are saved at every 250, 500, 750 and 1000 epoch runs.
+	FID scores were calculated like this in 25 different times using 25 different random vectors, with different time series data being generated each time.
+	Again the FID scores are averaged across this 25 iterations to produce the final result.
+	
+	The uTSGAN outperformed TSGAN for 55 datasets at the 1000th epoch and 43 datasets at 750th epoch
+	Overall the uTSGAN's score was 6.04 times better than TSGAN and all datasets saw an improvement in the FID score performance.
+
+Future Works:
+	Universal Evaluation metric for time series data.
+	Different training techniques like pixel normalization, progressively growing  the signal and conditioning the input
+	Using a classifier at the end of the discriminator so that we can condition the output
+	Use other architectures other than WGAN that was used here.
+	
