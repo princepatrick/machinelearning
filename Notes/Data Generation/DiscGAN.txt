@@ -1,0 +1,88 @@
+Distibuted Conditional GAN (discGAN)
+
+Abstract:
+	Much of the research works has been done on generating images using GANs
+	But limited research has been done to generate tabular data which is a very important and common type of data.
+	The dataset is 2027 eICU dataset.
+	Evaluation is done in Kolmogrov-Smirnov (KS) test for continous variables and chi-squared test for discrete variables.
+
+Problem:
+	Healthcare data is not available for public use due to privacy issues.
+	The publically available versions of them are limited hence there is not sufficient data for us to understand the relationships.
+	We can use GAN to generate such tabular data which can help us to build algorithms to solve the problems.
+
+Related Work:
+	1.CTGAN
+		From MIT, CTGAN is the SOTA in generating tabular data for discrete and continous data for various types of data.
+		They were built on the previous version of GAN implementations like - VeeGAN, TableGAN, MedGAN
+		The CTGAN improves by using a mode specific normalization in the training procedure.
+	2. MdGAN - Multi Discriminator GAN
+		It has a single centralized generator and multiple distributed discriminator
+		It was primarily evaluated against image data but could also be used for non-image data.
+		It was trained with MNIST, CIFAR10, CelebA dataset.
+		The evaluation was done in Inception Score(IS) and Frechet Inception Distance(FID). 
+			IS evaluates whether the data generated is "well recognized" and diverse. A higher IS Score the better
+			FID measures the distance between the real data and generated data.
+		Md-gan evaluated with peer-to-peer discriminator swapping throughout training and it produced marginal increase in performance.
+		The performance of Md-gan was evaluated interms of fault-tolerance and system crashes.
+	3. FeGAN - Scaling Distributed GANs
+		It builds a distributed conditional GAN with the Generator(G) and Discriminator(D) on K Devices. Different devices have access to different samples from different subsets of the datasets.
+		There is a central server that selects a set of devices from K. Devices are selected to "ensure a balanced number of samples per class"
+		Evaluated with MNIST, Fashion MNIST and ImageNet datasets using FID scores.
+		It was better than Vanilla GAN.
+	4. AsynDGAN - Distributed Asynchronized Discriminator GAN
+		They have a centralized generator and multiple discriminators with each discriminator being present with a hospital.
+		Since the results from each hospital are different from each other, the centralized generator gets to learn from differing types of data which gives it a wide range of input to work on the data.
+
+Methods:
+	Dataset:
+		eICU dataset with 2500 patient unit stay records
+	Architecture:
+		Primarily built on CTGAN. 
+		CTGANs use mode-specific normalization to overcome the issue of multi-modal, non-gaussian distribution and address data imbalance by using a conditional generator and by using training-by sampling.
+		The discGAN differed from CTGAN in that residual block(s) was not added which helped in the model being lightweight.
+		Uses Adam optimizer.
+		Generator architecture:
+			Input Layer,
+			[
+				Dense Layer,
+				leaky ReLU activation layer
+				Batch Normalization Layer
+			] * 3
+			Leaky ReLU activation layer
+			Dense Layer
+			There are totally 18945 trainable and 384 non-trainable parameters
+		Discriminator architecture:
+			[
+				Dense Layer,
+				leaky ReLU activation layer,
+				Dropout Regularization
+			] * 2
+			Final Dense output layer
+		
+Evaluation Metrics:
+	Evaluating the DiscGAN generated data
+	Continous Data:
+		For continous data, we had used two sample Kolmogrov-Smirnov test (KS). The two samples are real and the synthetic data.
+		The KS Test Value = 1 - KS Test D Statistic
+		KS Test D Statistic - Maximum distance between the real Cumulative Distribution function and synthetic Cumulative Distribution Function 
+		The average KS Test value for all continouse columns in the real vs synthetic data is used as the metric for continous variables.
+	Discrete Data:
+		Chi-squared test
+		The mean probability for discrete columns is defined as CS Test Metric
+	
+	The test is done on a 80/20 train/test split
+	
+
+Kolmogrov-Smirnov Test:
+	Compares two probability distributions and determine if they differ from each other.
+	It compares the maximum discrepancy(distance) between two CDF(Cumulative distribution function) of the two distributions being compared.
+	The score in KS test differ from 0 to Infinity. 
+	A score of 0 means they are identical. The positive end of the score is dependent on sample size and the nature of distributions of the score.
+
+Chi-Squared test:
+	THey calculate a value called Chi-Squared statistic that measures the discrepancy between the observed and expected frequencies in the contingency table.
+	The chi-squared statistic follows a chi-squared distribution that follows the dimensions of the contingency table that is used. 
+	
+
+	
