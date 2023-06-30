@@ -98,4 +98,53 @@ Future Works:
 	Different training techniques like pixel normalization, progressively growing  the signal and conditioning the input
 	Using a classifier at the end of the discriminator so that we can condition the output
 	Use other architectures other than WGAN that was used here.
+
+Questions:
+	Difference between WGAN and GAN:
+		1. Loss Function:
+			GANs use Jensen Shannon divergence or the Kullback-Liebler divergence for measuring the loss.
+			WGANs use **Wasserstein-distance(Earth Mover's distance)** for the loss function which produces more stable gradient signal.
+		2. Lipschitz continuity:
+			GANs are sensitive to **Lipschitz Continuity** of the discriminator network, which results in problems like Mode Collapse.
+			WGANs employ additional conditional parameters to control the Lipschitz continuity using weight clipping or gradient penalty.
+		3. Training Stability:
+			GANs suffer from training instability where they can't reach training equilibrium.
+			WGANs mitigate this by using Wasserstein distance providing more stable gradient signals leading to more stable training dynamics.
+		4. Interpretation of Loss:
+			In GANs, the loss is merely an indicator of the performance of the GAN.
+			In WGANs, the loss is the distance between the generated and real data distributions. A lower loss means a closer distance between the distributions.
+			
+			Jensen-Shannon Divergence:
+				It is the measure of the similarity between two probability distribtutions.
+				It is from Kullback-Liebler divergence and provides a smooth and symmetric version of it.
+			Wasserstein-distance:
+				Wasserstein-distance is the measure of dissimilarity between two probability distributions.
+				It is defined the cost in terms of effort needed to move a mass from one distribtution to the other.
+			Kullback-Liebler Divergence:
+				It is used to calculate the difference between two probability distributions.
+				It is also called as relative entropy.
+				It quantifies how one distribution differs from the other interms of information content.
+			Lipschitz Continuity:
+				In WGANs, the loss function is calculated through the Wasserstein-distance
+				THis distance can be calculated only if the model is lipschitz continous. 
+				The Lipschitz continuity is the mathematical property which ensures the model is lipschitz constant, that is the function is bound to be within the particular range.
+				Thus this continuity's condition is important for the proper working of WGANs and they employ techniques like Weight Clipping and Gradient Penalty to handle these issues.
+			Weight Clipping:
+				The problem in scope is the Lipschitz continuity for the discriminator in the GAN models. The discriminator tends to choose steep gradients which produces unstable training models.
+				To avoid this original WGAN proposed weight clipping, where based on the gradients of the current discriminator, the weights of the model is clipped or reduced.
+			Gradient Penalty:
+				The problem in scope is the Lipschitz continuity for the discriminator in the GAN models. The discriminator tends to choose steep gradients which produces unstable training models.
+				To avoid this original WGAN proposed weight clipping, where based on the gradients of the current discriminator, the weights of the model is clipped or reduced.
+				The alternate method is to give a penalty to the gradient when the gradients exceed a certain point at each iteration.
+			Mode Collapse:
+				This is the tendency of the model to produce results that are too similar to each other without considering the wide range of results that are found in the training data.
+				This problem is mode collapse as it does not consider the various modes of the other data in the dataset.
+			Vanishing Gradient Problem:
+				The vanishing gradient problem refers to the gradient that diminishes(exponentially) as we move/backpropagate to the earlier layers in the neural network.
+					This can be handled through various means:
+						1. Using LSTM, RNN kind of architectures.
+						2. Using skipping algorithm for Residual which skips few layers so that it directly goes to the earlier layers.
+						3. ReLU activation function - that returns only 0 and 1 unlike other activation functions which give a different range of numbers which would create a loss as we backpropagate.
+						4. Batch Normalization - Batch Normalization is a process by which we normalize the data into a given range, which helps in reducing the impact of losing the gradient over the layers.
+				
 	
