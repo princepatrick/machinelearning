@@ -1,0 +1,31 @@
+Variational Autoencoder:
+	It is a generative model to generate data.
+	It is used to learn the latent representation of the data and then use it to generate synthetic versions that is similar to the origninal version.
+	It is an extension of the traditional autoencoder architecture.
+	The purpose is to understand the probability distribution of the data and then use this understanding to generate samples.
+	The architecture comprises of encoder ,decoder and a loss function.
+
+	Encoder:
+		The encoder takes an input data point and converts it into a distribution which is spread in the latent space. The important features are being selectivel represented in the distibution while reducing the dimensionality.
+		It models the distibution as a multivariate Gaussian distribution with a mean and a variance.
+	
+	Decoder:
+		The decoder network takes in the distribution in the latent space to convert it into data, while reconstructing the data as accurate as possible.
+
+The training of VAE involves to reduce the Evidence Lower Bound (ELBO)  which is derived from concept of variational inference.
+The ELBO consists of two important terms:
+	Reconstruction loss:
+		This is the difference between the original data and the reconstructed data
+	Regularization Term:
+		This is makes the distribution to follow a prior distribution (Gaussian Distribution)
+
+Through learning the parameters of the encoder and decoder, the VAE can generate to fro from the latent space and data space. The distribution of data in the latent space enables the data from various sources to be spread in one common space that allows data exploration and manipulation.
+
+They are particularly useful when dealing with high dimensionality data as the can understand the latent distribution between them.
+
+Limitation:
+	The limitation of the VAE is that it generates the data from the latent representation which is a lower dimensionality version of the orignial data. THus it might produce less accurate data when compared to GANs.
+	it is tradeoff between learning interpretable learning representation and generate data.
+
+		
+		
