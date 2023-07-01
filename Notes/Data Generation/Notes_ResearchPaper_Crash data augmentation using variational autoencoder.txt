@@ -38,7 +38,38 @@ Approach:
 	It was trained for 12000 epochs to consider all non-crash data.
 	We have used a confidence ellipsoid to draw the latent space boundary
 
-Real Data: - 70% training, 30% test
+	Real Data: - 70% training, 30% test
 	Undersampled data, ADASYN Data, SMOTE Data, VAE Data A, VAE Data B, VAE Data C
 	This fed into LR, SVM and ANN
 	Evaluating the trained model based on confusion matrix, specificity, sensitivity and AUC scores
+
+There are in total 5 different datasets:
+	1. Real Data - The original data from the datasets
+	2. Undersampled Data - It contains all the crash data and a sample of non-crash data. The data is perfectly balanced - ie the number of crash and non-crash data are the same.
+	3. ADASYN Data - An oversampling technique which also produces balanced data - the number of crash data is same as the number of non-crash data.
+	4. SMOTE data - An oversampling technique which produces balanced data
+	5. VAE Data(a, b, and c) - All these contains the generated data from the VAE and inaddition to that the 437 crash data. This is 3 sets of the VAE generated data. The 3 sets of the data is dependent on the confidence ellipsoid score of the data set.
+
+	They are now being fed into classification tasks like Logistic Regression and Support Vector Machine and are being evaluated basd on specificity, sensitivity and AUC 
+
+Specificity:
+	It is the ability of the model to predict a non-crash data as a non-crash data
+	Specificity = True Negative / True Negative + True Positive
+	
+Sensitivity:
+	It is the ability of the model to predict the crash data as crash data
+	Sensitivity = True Positive / True Negative + True Positive
+
+AUC Score:
+	The Area under Curve score. This is used to indicate how well the model is able to distinguish between the various values.
+
+	VAE Data C - Confidence ellipsoid 90% is the model with the highest scores for the model among the VAE - Data(a, b,c) sets. THus VAE Data c set will be the representative model for VAE.
+	
+	Comparing VAE Data C with SMOTE and ADASYN:
+		On comparing the operations for Logistic Regression, Support Vector Machine and Artificial Neural Network for SMOTE, ADASYN and VAE Data C, we find that for Logistic Regression SMOTE and ADASYN were better than VAE Data C and for the remaining two models of SVM and ANN, VAE Data C is proven to be better.
+	
+	Comparing VAE Data C with DCGAN:
+		When compared with DCGAN, for LR and SVM VAE Data C proved to be the better model/data and when evaluated for ANN, AUC for DCGAN is 1% better while the sensitivity of VAE Data C is 4% better.
+
+Statistical Comparison between Real and Synthetic Data:
+	The study used t-test, Levene Test and Kolmogrove-Smirnov test for comparing real and synthetic data and the scores(p-value) were above 0.05 for each category which indicated high similarity between the datasets.
