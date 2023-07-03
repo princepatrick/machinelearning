@@ -1,0 +1,104 @@
+URL: https://ieeexplore.ieee.org/abstract/document/8285168
+
+Variational Autoencoder based synthetic data generation for Imbalanced learning:
+
+Abstract:
+	Discovering patterns from imbalanced datasets holds a great good for understanding and building models.
+	But having an imbalanced dataset, would provide great difficulty for the model to learn the underlying distribution since the dataset is imbalanced in nature.
+	To make the dataset into a balanced structure there are various methods proposed such as SMOTE, ADASYN etc. But these sampling methods have their problem in dealing with high-dimensional data.
+	Hence, VAE is proposed for solving this problem to deal with Imbalanced datasets that have a high-dimensional data.
+	The new model is compared with the synthetic sampling techniques with 5 evaluation metrics and the performance is evaluated.
+
+Introduction:
+	The imbalanced nature of the datasets might result in the models to be skewed towards the more representative features.
+	To facilitate a more fairer training of the model, the minority classes of the model could be populated so that the dataset is balanced in nature.
+	There are several sampling methods like ADASYN and SMOTE that operates with the minority classes to improve the frequency but they fare poorly in high-dimensional data.
+	The ADASYN and SMOTE operate based on calculating and populating data depending on the euclidean distance between the samples. But such euclidean distance between the data does not work well for high dimensional data. Hence, we have to use other methods like Variational Autoencoder.
+
+Related Work:
+	SMOTE
+	ADASYN
+	
+Variational Autoencoder:
+	The variational autoencoder consists of an encoder and a decoder.
+	The architecture of the encoder is as follows:
+		Input Layer
+		3 Convolutional Layer - kernel size = 5*5, stride size = 2*2
+		Dropout layer - keep-probability = 0.9
+		Flatten layer
+		Dense Layer - no activaation function
+	The architecture of the decoder is as follows:
+		Input Layer
+		Dimension Expansion Layer
+		4 Deconvolutional Layer 
+			Deconv 1 - kernel-size = 3*3, stride size = 1*1
+			Deconv 2 - kernel-size = 5*5, stride size = 1*1
+			Deconv 3 - kernel-size = 5*5, stride size = 2*2
+			Deconv 4 - kernel-size = 5*5, stride size = 2*2
+
+Tried on MNIST and affNIST datasets:
+	MNIST dataset - the handwritten digits dataset
+	aftNIST dataset - the MNIST dataset after translation, scaling and rotation
+
+The performance is evaluated in 5 performance metrics - Precision, Recall, F1, G_mean, Specificity
+	The VAE has higher performance in Recall, F1 and specificity
+
+Keywords:
+	SMOTE: 
+		Synthetic Minority Over-sampling Technique
+		It is a technique to handle the class imbalance problem.
+		THe SMOTE handles the problem by generating data into the minority class, which will bridge the gap between the minority class and the majority class.
+		The SMOTE interpolates the datapoints inbetween the minority class points.
+		
+		The steps in the SMOTE algorithm to generate minority instances:
+			Choose a minority instance(seed instance) in the feature space.
+			Find the k nearest neighbours/instances based on a valid euclidean distance.
+			Choose one of the k nearest neighbour over there.
+			Populate a minority instance inbetween the seed instance and the chosen k nearest instance.
+			Repeat the above steps until you reach the desired augmentation for the minority class
+			
+		Limitation:
+			SMOTE generates minority instances without the complete or exact understanding on the representation of the data.
+			This can lead to overfitting of the data samples.
+			One way of handling this limitation is to use other techniques along with the SMOTE like undersampling the majority class or adjusting the class weights etc.
+	
+	ADASYN:
+		Adaptive Synthetic Sampling is used to address the class imbalance problem and is an extension of the SMOTE algorithm. The difference being, the Adaptive algorithm employs it's population of the samples in spaces where the imbalance is severe.
+		
+		The algorithm works as below:
+			COmpute the imbalance ratio, ie the number of majority instances to each minority instance in the space.
+			For each minority instance, calculate the density distribution of the k nearest neighbours of the similar classes.
+			Now based on density distribution rate for each instance, calculate the synthetic data generattion rate.
+			Based on the data generation rate, find the number of synthetic instance to be generated.
+			Now run SMOTE on each of the instance while providing an info on the number of instances for each of the minority instance.
+		
+		Limitation:
+			It contains similar issues of overfitting and lack of understanding of the data representation patterns of the Minority instances.
+			
+	
+	Class Imbalance Problem:
+		The class imbalance problem occurs when the number of data in one class is lesser than the other class that leads to biased results for the model.
+	
+	Neural Networks:
+		Kernel-SIze: 
+			It is the sliding window of data, that a neuron could receive when the convolution operation takes place.
+			It is usually a square window like 3*3 or 5*5
+			THe kernel-size is crucial for taking in the information from the data.
+			A smaller kernel-size would allow for more fine-grained details while a larger kernel-size would allow more larger objects or shapes
+		
+		Stride-Size:
+			The stride-size is the step size of the kernel as we move across the input data.
+			A stride size of 1 leads to overlapping receptive fields while a larger stride size leads to less overlap but at the same time result in smaller output size.
+	
+	Dropout Layer:
+		The dropout layer is feature by which a subset of the neurons are dropped from being used in the evaluation.
+		THis helps in reducing the overfitting of the model and at the same time increase the generalization of the model.
+		The keep-probability is used to control the amount of the neurons that are to be retained for the current calculation using the layer.
+		The scores of 0 indicate all dropping of neurons, 1 indicate keeping all the neurons and 0.9 indicate keeping 90% of the neurons
+	
+	Flatten Layer:
+		This layer is used to reshape the data from multi-dimensional layer to one-dimensonal layer.
+	
+	
+	
+	
